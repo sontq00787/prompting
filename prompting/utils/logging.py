@@ -104,15 +104,19 @@ def reinit_wandb(self):
 
 
 def log_event(self, event):
+    try:        
+        if not self.config.neuron.dont_save_events:            
+            ...
+            #TODO: This line is making the code crash without any error message, needs to be investigated
+            # logger.log("EVENTS", "events", **event)
 
-    if not self.config.neuron.dont_save_events:
-        logger.log("EVENTS", "events", **event)
+        if self.config.wandb.off:
+            return
 
-    if self.config.wandb.off:
-        return
+        if not getattr(self, "wandb", None):
+            init_wandb(self)
 
-    if not getattr(self, "wandb", None):
-        init_wandb(self)
-
-    # Log the event to wandb.
-    self.wandb.log(event)
+        # Log the event to wandb.
+        self.wandb.log(event)
+    except Exception as e:
+        bt.logging.error(e)
