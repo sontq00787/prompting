@@ -13,8 +13,6 @@
 
 </div>
 
----
-
 This repository is the **official codebase for Bittensor Subnet 1 (SN1) v1.0.0+, which was released on 22nd January 2024**. To learn more about the Bittensor project and the underlying mechanics, [read here.](https://docs.bittensor.com/).
 
 # Introduction
@@ -28,7 +26,17 @@ Validators and miners are based on large language models (LLM). The [validation 
 # Compute Requirements
 
 1. To run a **validator**, you will need at least 24GB of VRAM. 
-2. To run the default Zephyr **miner**, you will need at least 18GB of VRAM. 
+2. To run the default Zephyr **miner**, you will need at least 18GB of VRAM.
+3. To run an openai miner, you will need at least a 2GB CPU for PyTorch.
+
+</div>
+
+# TLDR: Easy Installation
+If you want to get everything you need to run a miner or a validator on SN1 on a new machine, you can run the following bash script:
+```bash
+bash scripts/setup_sn1.sh
+```
+The script are the consolidation of information and steps outlined in the `Running Validators` and `Installation` sections below. We also recommend running this script inside a virtual environment, either in Python `venv` or `conda`, to avoid potential installation issues. 
 
 </div>
 
@@ -36,20 +44,28 @@ Validators and miners are based on large language models (LLM). The [validation 
 The design of the network's incentive mechanism is based on two important requirements:
 
 ### 1. Validation should mimic human interactions
-
+<details>
+<summary>Additional Information</summary>
 It is imperative that the validation process engages with miners in the same way as real users. The reasons for this are as follows:
+
 - Miners will compete and continuously improve at performing the validation task(s), and so this fine tuning should be aligned with the goals of the subnet.
 - It should not be possible to distinguish between validation and API client queries so that miners always serve requests (even when they do not recieve emissions for doing so).
 
 In the context of this subnet, miners are required to be intelligent AI assistants that provide helpful and correct responses to a range of queries. 
+</details>
 
 ### 2. Reward models should mimic human preferences
-
+<details>
+  <summary>Additional Information</summary>
 In our experience, we have found that it is tricky to evaluate whether miner responses are high quality. Existing methods typically rely on using LLMs to score completions given a prompt, but this is often exploited and gives rise to many adversarial strategies.
 
 In the present version, the validator produces one or more **reference** answers which all miner responses are compared to. Those which are most similar to the reference answer will attain the highest rewards and ultimately gain the most incentive.
 
 **We presently use a combination of string literal similarity and semantic similarity as the basis for rewarding.**
+
+</details>
+
+</div>
 
 # Tools
 Contexts, which are the basis of conversations, are from external APIs (which we call tools) which ensure that conversations remain grounded in factuality. Contexts are also used to obtain ground-truth answers.
@@ -106,7 +122,8 @@ These validators are designed to run and update themselves automatically. To run
 
 This will run **two** PM2 process: one for the validator which is called `s1_validator_main_process` by default (you can change this in `run.sh`), and one for the run.sh script (in step 4, we named it `s1_validator_autoupdate`). The script will check for updates every 30 minutes, if there is an update then it will pull it, install it, restart `s1_validator_main_process` and then restart itself.
 
-
+</div>
+---
 
 # Available Miners
 
@@ -153,21 +170,20 @@ python neurons/validator.py
 
 ```bash
 # To run the miner
-python neurons/miners/BASE_MINER/miner.py 
+python neurons/miners/<miner>/miner.py 
     --netuid 1
     --subtensor.network <finney/local/test>
     --wallet.name <your miner wallet> # Must be created using the bittensor-cli
     --wallet.hotkey <your validator hotkey> # Must be created using the bittensor-cli
     --logging.debug # Run in debug mode, alternatively --logging.trace for trace mode
 ```
-where `BASE_MINER` is [zephyr](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta), which is a fine-tuned Mistral-7B, however you can choose any of the supplied models found in `neurons/miners`. 
+where `miner` is replaced with any of the supplied models found in `neurons/miners`. The base GPU miner is [zephyr](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta), which is a fine-tuned Mistral-7B.
 
 For users who are new to the Bittensor ecosystem, 'finney' is the recommended subtensor, but more advanced users are encouraged to run a subtensor locally for greater performance and stability. 
 
 </div>
 
 ---
-
 
 
 # Real-time monitoring with wandb integration

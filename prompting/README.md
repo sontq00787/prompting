@@ -1,11 +1,10 @@
 
-# Prototype for new LLM validation mechanism: Jan 15 release
+# Prototype for new LLM validation mechanism: Jan 22nd release
 
 ![next-release-diagram](assets/next-release-diagram.png)
 
 1. Follow the installation steps of this [repo]('../README.md') to create a virtual environment with all the needed dependencies
-2. Install the extra dependencies of this folder by running `pip install -r requirements.txt`
-3. Run `python main.py` located in this folder
+2. Run `python main.py` located in this folder
 
 
 
