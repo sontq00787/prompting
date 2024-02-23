@@ -88,11 +88,11 @@ class ZephyrMiner(Miner):
                 self.log_event(
                     timing=synapse_latency,
                     prompt=prompt,
-                    completion=response,
+                    completion=completion,
                     system_prompt=self.system_prompt,
                 )
 
-            bt.logging.debug(f"✅ Served Response: {response}")
+            bt.logging.debug(f"✅ Served Response: {completion}")
             torch.cuda.empty_cache()
             self.step += 1
 
