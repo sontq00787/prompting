@@ -136,6 +136,13 @@ def add_miner_args(cls, parser):
     """Add miner specific arguments to the parser."""
 
     parser.add_argument(
+        "--neuron.api_url",
+        type=str,
+        help="The URL of the API to query.",
+        default="http://localhost:8000/query",
+    )
+
+    parser.add_argument(
         "--neuron.name",
         type=str,
         help="Trials for this neuron go in neuron.root / (wallet_cold - wallet_hot) / neuron.name. ",
