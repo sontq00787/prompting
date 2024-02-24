@@ -40,4 +40,5 @@ def query(query_input: QueryInput):
         role="user",
         disregard_system_prompt=False,
     )
+    torch.cuda.empty_cache()
     return {"completion": completion}
