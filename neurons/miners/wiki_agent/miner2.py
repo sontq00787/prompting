@@ -49,7 +49,7 @@ class WikipediaAgentMiner(Miner):
 
         _ = load_dotenv(find_dotenv())
         
-        self.api_url = self.config.neuron.api_url
+        self.api_url = self.config.neuron.api_url or "http://127.0.0.1:8868/query"
 
         self.agent = WikiAgent(self.config.neuron.model_id, self.config.neuron.temperature)
         self.accumulated_total_tokens = 0
