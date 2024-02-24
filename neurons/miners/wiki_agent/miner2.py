@@ -108,6 +108,9 @@ class WikipediaAgentMiner(Miner):
             
                 wiki_results = self.agent.run(message)
                 
+                wiki_latency = time.time() - t0
+                bt.logging.debug(f"📚 Wikipedia results found in {wiki_latency}s")
+                
                 template = """Answer the following questions as best you can. I give you some more information to help you out:
                 
                             Question: {message}
@@ -121,7 +124,7 @@ class WikipediaAgentMiner(Miner):
 
                 completion = response.json()["completion"]
 
-                synapse.completion = response
+                synapse.completion = completion
                 synapse_latency = time.time() - t0
 
                 if self.config.wandb.on:
@@ -133,7 +136,7 @@ class WikipediaAgentMiner(Miner):
                         extra_info=self.get_cost_logging(cb)
                     )
 
-            bt.logging.debug(f"✅ Served Response: {completion}")
+            bt.logging.debug(f"✅ Served Response (take total {synapse_latency}): {completion}")
             self.step += 1
 
             return synapse
