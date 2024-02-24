@@ -123,7 +123,7 @@ class WikiAgent:
         self.agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
     
     def get_llm(self, model_id: str, model_temperature: float):
-        llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "mps")
+        llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "cpu")
         return HuggingFaceLLM(
             llm_pipeline=llm_pipeline,
             system_prompt="You are a friendly chatbot who always responds concisely and helpfully. You are honest about things you don't know.",
