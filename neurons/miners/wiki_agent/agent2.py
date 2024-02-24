@@ -7,9 +7,9 @@ import bittensor as bt
 from typing import Union
 from typing import List
 from langchain.prompts import StringPromptTemplate
-from langchain import OpenAI
+# from langchain import OpenAI
 from langchain.agents import Tool
-from langchain.agents import initialize_agent
+# from langchain.agents import initialize_agent
 from langchain.chains import LLMChain
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 
@@ -126,7 +126,7 @@ class WikiAgent:
         llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "cpu")
         return HuggingFaceLLM(
             llm_pipeline=llm_pipeline,
-            system_prompt="You are a friendly chatbot who always responds concisely and helpfully. You are honest about things you don't know.",
+            system_prompt="",
             max_new_tokens=1024,
             do_sample=True,
             temperature=model_temperature,
