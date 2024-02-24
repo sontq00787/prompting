@@ -1,4 +1,5 @@
 from langchain.utilities import WikipediaAPIWrapper
+from langchain_community.tools import WikipediaQueryRun
 from langchain.agents import Tool
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.schema import AgentAction, AgentFinish, OutputParserException
@@ -13,9 +14,9 @@ from langchain.agents import Tool
 from langchain.chains import LLMChain
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 
-import torch
-import prompting
-from prompting.llm import load_pipeline, HuggingFaceLLM
+# import torch
+# import prompting
+# from prompting.llm import load_pipeline, HuggingFaceLLM
 
 # Set up the base template
 template = """Answer the following questions as best you can. You have access to the following tools:
@@ -86,53 +87,11 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
-class WikiAgent:
+class WikiAgent:    
     def __init__(self, model_id: str, model_temperature: float):
-        self.wikipedia = WikipediaAPIWrapper()
-        tools = [    
-            Tool(
-                name='wikipedia',
-                func= self.wikipedia.run,
-                description="Useful for when you need to look up a topic, country or person on wikipedia"
-        )]
+        wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper(top_k_results=10, doc_content_chars_max=65000))
+        self.agent_executor = wikipedia
 
-
-        prompt = CustomPromptTemplate(
-            template=template,
-            tools=tools,
-            # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
-            # This includes the `intermediate_steps` variable because that is needed
-            input_variables=["input", "intermediate_steps"]
-        )
-
-        bt.logging.info(f"Initializing agent with model_id: {model_id} and model_temperature: {model_temperature}")
-        # llm = OpenAI(model_name=model_id, temperature=model_temperature)
-        llm = self.get_llm(model_id, model_temperature)
-
-
-        llm_chain = LLMChain(llm=llm, prompt=prompt)
-        output_parser = CustomOutputParser()
-
-        agent = LLMSingleActionAgent(
-            llm_chain=llm_chain,
-            output_parser=output_parser,
-            stop=["\nObservation:"],
-            allowed_tools=tools,            
-        )
-
-        self.agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
-    
-    def get_llm(self, model_id: str, model_temperature: float):
-        llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "cpu")
-        return HuggingFaceLLM(
-            llm_pipeline=llm_pipeline,
-            system_prompt="",
-            max_new_tokens=1024,
-            do_sample=True,
-            temperature=model_temperature,
-            top_k=50,
-            top_p=0.95,
-        )        
 
     def run(self, input: str) -> str:
         return self.agent_executor.run(input)
