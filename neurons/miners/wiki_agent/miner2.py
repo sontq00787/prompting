@@ -109,7 +109,7 @@ class WikipediaAgentMiner(Miner):
                 wiki_results = self.agent.run(message)
                 
                 wiki_latency = time.time() - t0
-                bt.logging.debug(f"📚 Wikipedia results found in {wiki_latency}s")
+                bt.logging.debug(f"📚 Wikipedia results found in {wiki_latency}s: {wiki_results}")
                 
                 template = """Answer the following questions as best you can. I give you some more information to help you out:
                 
