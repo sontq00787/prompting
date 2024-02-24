@@ -111,12 +111,13 @@ class WikipediaAgentMiner(Miner):
                 wiki_latency = time.time() - t0
                 bt.logging.debug(f"📚 Wikipedia results found in {wiki_latency}s: {wiki_results}")
                 
-                template = """Answer the following questions as best you can. I give you some more information to help you out:
-                
-                            Question: {message}
+                template = """Answer the following questions as best you can. Remember to be concise and helpful. Answer directly the questions. If you need more information:
                             Information:
                         
-                            {wiki_results}"""
+                            {wiki_results}
+
+                            Question: {message}
+                            """
                 
                 # Make a POST request to the FastAPI endpoint
                 response = requests.post(self.api_url, json={"prompt": template.format(message=message, wiki_results=wiki_results)})
