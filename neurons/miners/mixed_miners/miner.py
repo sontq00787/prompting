@@ -51,6 +51,7 @@ class OpenAIMiner(Miner):
 
     def __init__(self, config=None):
         super().__init__(config=config)
+        self.api_url = config.neuron.api_url
 
         bt.logging.info(f"Initializing with model {self.config.neuron.model_id}...")
 
