@@ -55,7 +55,8 @@ def query(query_input: QueryInput):
         temperature=0.7,
         top_p=0.95,
         top_k=40,
-        max_new_tokens=1024
+        max_new_tokens=1024,
+        pad_token_id=tokenizer.eos_token_id
     )
 
     # print("Output: ", tokenizer.decode(generation_output[0]))
