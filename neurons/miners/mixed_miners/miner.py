@@ -24,12 +24,9 @@ import requests
 # Bittensor Miner Template:
 import prompting
 from prompting.protocol import PromptingSynapse
-from prompting.llm import load_pipeline
-from prompting.llm import HuggingFaceLLM
 
 # import base miner class which takes care of most of the boilerplate
 from neurons.miner import Miner
-from neurons.miners.zephyr.miner import ZephyrMiner
 
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -76,31 +73,6 @@ class OpenAIMiner(Miner):
         self.accumulated_prompt_tokens = 0
         self.accumulated_completion_tokens = 0
         self.accumulated_total_cost = 0
-
-        # Zephyr Miner
-        # reconfig model id for zephyr
-
-        model_kwargs = None
-        if self.config.neuron.load_quantized:
-            bt.logging.info("Loading quantized model...")
-            model_kwargs = dict(
-                torch_dtype=torch.float16,
-                load_in_8bit=True,
-            )
-
-        if self.config.wandb.on:
-            self.identity_tags = ("zephyr_miner", )
-
-            if self.config.neuron.load_quantized:
-                self.identity_tags += ("8bits_quantization", )
-
-        self.llm_pipeline = load_pipeline(
-            model_id=self.config.neuron.model_id_2,
-            torch_dtype=torch.float16,
-            device=self.device,
-            mock=self.config.mock,
-            model_kwargs=model_kwargs,
-        )
 
     def get_cost_logging(self, cb):
         bt.logging.info(f"Total Tokens: {cb.total_tokens}")
