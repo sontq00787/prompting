@@ -58,8 +58,8 @@ def query(query_input: QueryInput):
         max_new_tokens=1024
     )
 
-    print("Output: ", tokenizer.decode(generation_output[0]))
-    completion = tokenizer.decode(generation_output[0])
+    # print("Output: ", tokenizer.decode(generation_output[0]))
+    completion = extract_assistant_response(tokenizer.decode(generation_output[0]))
 
     # print("*** Pipeline:")
     # pipe = pipeline(
@@ -91,3 +91,18 @@ def query(query_input: QueryInput):
     # )
     torch.cuda.empty_cache()
     return {"completion": completion}
+
+
+def extract_assistant_response(completion: str) -> str:
+    # Splitting the completion string at "assistant\n\n"
+    parts = completion.split("assistant\n\n")
+    
+    # The assistant's response is expected to be after the last occurrence of "assistant\n\n"
+    if len(parts) > 1:
+        # Taking everything after "assistant\n\n" and stripping leading/trailing whitespace
+        assistant_response = parts[-1].strip()
+    else:
+        # If "assistant\n\n" is not found, return an indication that the response couldn't be extracted
+        assistant_response = "I'm sorry, I couldn't extract the response."
+    
+    return assistant_response
