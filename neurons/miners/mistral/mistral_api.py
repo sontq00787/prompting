@@ -42,40 +42,40 @@ def query(query_input: QueryInput):
 
         '''
 
-    # print("\n\n*** Generate:")
+    print("\n\n*** Generate:")
 
-    # tokens = tokenizer(
-    #     prompt_template,
-    #     return_tensors='pt'
-    # ).input_ids.cuda()
+    tokens = tokenizer(
+        prompt_template,
+        return_tensors='pt'
+    ).input_ids.cuda()
 
-    # # Generate output
-    # generation_output = model.generate(
-    #     tokens,
-    #     do_sample=True,
-    #     temperature=0.7,
-    #     top_p=0.95,
-    #     top_k=40,
-    #     max_new_tokens=512
-    # )
-
-    # print("Output: ", tokenizer.decode(generation_output[0]))
-
-
-    print("*** Pipeline:")
-    pipe = pipeline(
-        "text-generation",
-        model=model,
-        tokenizer=tokenizer,
-        max_new_tokens=1024,
+    # Generate output
+    generation_output = model.generate(
+        tokens,
         do_sample=True,
         temperature=0.7,
         top_p=0.95,
         top_k=40,
-        repetition_penalty=1.1
+        max_new_tokens=1024
     )
 
-    completion =  pipe(prompt_template)[0]['generated_text']
+    print("Output: ", tokenizer.decode(generation_output[0]))
+    completion = tokenizer.decode(generation_output[0])
+
+    # print("*** Pipeline:")
+    # pipe = pipeline(
+    #     "text-generation",
+    #     model=model,
+    #     tokenizer=tokenizer,
+    #     max_new_tokens=1024,
+    #     do_sample=True,
+    #     temperature=0.7,
+    #     top_p=0.95,
+    #     top_k=40,
+    #     repetition_penalty=1.1
+    # )
+
+    # completion =  pipe(prompt_template)[0]['generated_text']
 
     # completion = HuggingFaceLLM(
     #     llm_pipeline=llm_pipeline,
