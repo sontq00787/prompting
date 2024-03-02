@@ -191,7 +191,7 @@ class OpenAIMiner(Miner):
 
             synapse_latency = time.time() - t0
 
-            bt.logging.debug(f"✅ LLM Served Response in {synapse_latency}: {response}")
+            bt.logging.debug(f"✅ LLM Served Response in {synapse_latency}: {completion}")
             torch.cuda.empty_cache()
 
         except Exception as e:
