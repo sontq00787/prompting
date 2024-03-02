@@ -15,7 +15,7 @@ model_id = "TheBloke/Mistral-7B-OpenOrca-AWQ"  # Example model ID
 
 # Load model
 model = AutoAWQForCausalLM.from_quantized(model_id, fuse_layers=True,
-                                          trust_remote_code=False, safetensors=True)
+                                          trust_remote_code=False, safetensors=True, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=False)
 
 
