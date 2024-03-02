@@ -4,8 +4,8 @@ from typing import List
 import torch
 import bittensor as bt
 # Bittensor Miner Template:
-from awq import AutoAWQForCausalLM
-from transformers import AutoTokenizer, pipeline
+# from awq import AutoAWQForCausalLM
+from transformers import AutoTokenizer, pipeline, AutoModelForCausalLM
 
 app = FastAPI()
 
@@ -14,8 +14,7 @@ app = FastAPI()
 model_id = "TheBloke/Mistral-7B-OpenOrca-AWQ"  # Example model ID
 
 # Load model
-model = AutoAWQForCausalLM.from_quantized(model_id, fuse_layers=True,
-                                          trust_remote_code=False, safetensors=True, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto", torch_dtype=torch.float16 )
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=False)
 
 
