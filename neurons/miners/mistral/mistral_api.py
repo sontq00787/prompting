@@ -105,4 +105,4 @@ def extract_assistant_response(completion: str) -> str:
         # If "assistant\n\n" is not found, return an indication that the response couldn't be extracted
         assistant_response = "I'm sorry, I couldn't extract the response."
     
-    return assistant_response
+    return assistant_response.replace("<|im_end|>", "")
