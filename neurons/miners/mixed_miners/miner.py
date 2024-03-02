@@ -144,11 +144,20 @@ class OpenAIMiner(Miner):
                     )
 
             bt.logging.debug(f"✅ Served Response: {response}")
-            if "I'm sorry" in response:
-                print("String contains 'I'm sorry', forwarding to zephyr...")
+            # List of phrases indicating the model is uncertain
+            uncertainty_phrases = [
+                "I am not certain",
+                "I'm sorry",
+                "Sorry, but I do not have",
+                "I don't have specific",
+                "Sorry, I am not aware of any specific"
+            ]
+
+            if any(phrase in response for phrase in uncertainty_phrases):
+                print("String contains 'uncertainty phrase', forwarding to llm...")
                 synapse = await self.forward_llm(synapse)
             else: 
-                print("String does not contain 'I'm sorry'")
+                print("Response does not indicate uncertainty")
             return synapse
         except Exception as e:
             bt.logging.error(f"Error in forward: {e}")
