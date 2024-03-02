@@ -47,14 +47,13 @@ class OpenAIMiner(Miner):
         Adds OpenAI-specific arguments to the command line parser.
         """
         super().add_args(parser)
-
+        
 
     def __init__(self, config=None):
         super().__init__(config=config)
-        self.api_url = config.neuron.api_url
 
         bt.logging.info(f"Initializing with model {self.config.neuron.model_id}...")
-
+        self.api_url = self.config.neuron.api_url
         if self.config.wandb.on:
             self.identity_tags =  ("openai_miner", ) + (self.config.neuron.model_id, )
         
