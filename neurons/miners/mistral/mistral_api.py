@@ -11,11 +11,11 @@ app = FastAPI()
 
 # Load the HuggingFace model
 # model_kwargs: dict = None
-model_id = "TheBloke/Mistral-7B-OpenOrca-AWQ"  # Example model ID
+model_id = "Open-Orca/Mistral-7B-OpenOrca"  # Example model ID
 
 # Load model
 model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto", torch_dtype=torch.float16 )
-tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=False)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 
 class QueryInput(BaseModel):
