@@ -73,6 +73,7 @@ class HuggingFaceLLM:
             top_k=top_k,
             top_p=top_p,
             max_new_tokens=max_new_tokens,
+            pad_token_id=self.llm_pipeline.tokenizer.eos_token_id,
         )
 
         self.messages = [{"content": self.system_prompt, "role": "system"}]

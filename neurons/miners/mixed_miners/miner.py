@@ -150,7 +150,8 @@ class OpenAIMiner(Miner):
                 "I'm sorry",
                 "Sorry, but I do not have",
                 "I don't have specific",
-                "Sorry, I am not aware of any specific"
+                "Sorry, I am not aware of any specific",
+                "I'm not familiar with any specific"
             ]
 
             if any(phrase in response for phrase in uncertainty_phrases):

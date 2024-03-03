@@ -11,8 +11,22 @@ app = FastAPI()
 
 # Load the HuggingFace model
 # model_kwargs: dict = None
+model_kwargs = dict(
+    torch_dtype=torch.float16,
+    load_in_8bit=True,
+)
+  
 model_id = "HuggingFaceH4/zephyr-7b-beta"  # Example model ID
-llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "cpu")
+llm_pipeline = load_pipeline(
+    model_id=model_id,
+    torch_dtype=torch.float16,
+    device="auto",
+    mock=None,
+    model_kwargs=model_kwargs,
+)  
+
+
+# llm_pipeline = load_pipeline(model_id=model_id, torch_dtype=torch.float16, device="cuda" if torch.cuda.is_available() else "cpu")
 
 
 class QueryInput(BaseModel):
